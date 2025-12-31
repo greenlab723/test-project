@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('styles'); ?>
+  </head>
+  <body>
+    <div class="container">
+      <h1>テンプレート変更履歴</h1>
+      <? if (organizationName) { ?>
+        <p class="muted"><?!= organizationName ?></p>
+      <? } ?>
+
+      <nav class="admin-nav">
+        <a class="link" href="?action=admin_dashboard">ダッシュボード</a>
+        <a class="link" href="?action=admin">会員一覧</a>
+        <a class="link" href="?action=admin_mail_log">メール履歴</a>
+        <a class="link" href="?action=admin_action_log">操作ログ</a>
+        <a class="link" href="?action=admin_change_log">変更履歴</a>
+        <a class="link" href="?action=admin_error_log">エラーログ</a>
+        <a class="link" href="?action=admin_mail_retry">再送キュー</a>
+        <a class="link" href="?action=admin_templates">テンプレート</a>
+        <a class="link" href="?action=admin_template_log">テンプレ履歴</a>
+      </nav>
+
+      <form method="get" class="toolbar">
+        <input type="hidden" name="action" value="admin_template_log" />
+        <input type="text" name="q" value="<?!= query ?>" placeholder="管理者・テンプレキーで検索" />
+        <select name="page_size">
+          <option value="25" <?!= pageSize === 25 ? 'selected' : '' ?>>25件</option>
+          <option value="50" <?!= pageSize === 50 ? 'selected' : '' ?>>50件</option>
+          <option value="100" <?!= pageSize === 100 ? 'selected' : '' ?>>100件</option>
+        </select>
+        <button type="submit">検索</button>
+      </form>
+
+      <p class="hint">表示件数: <?!= pageSize ?>件 / 全<?!= total ?>件</p>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>日時</th>
+            <th>管理者</th>
+            <th>テンプレ</th>
+            <th>件名（前→後）</th>
+            <th>本文（前→後）</th>
+            <th>復元</th>
+          </tr>
+        </thead>
+        <tbody>
+          <? if (logs.length === 0) { ?>
+            <tr>
+              <td colspan="5">履歴がありません。</td>
+            </tr>
+          <? } else { ?>
+            <? logs.forEach(function(log) { ?>
+              <tr>
+                <td><?!= log.changedAt ?></td>
+                <td><?!= log.adminEmail ?></td>
+                <td><?!= log.templateKey ?></td>
+                <td>
+                  <pre class="preview"><?!= log.beforeSubject ?></pre>
+                  <pre class="preview"><?!= log.afterSubject ?></pre>
+                </td>
+                <td>
+                  <pre class="preview"><?!= log.beforeBody ?></pre>
+                  <pre class="preview"><?!= log.afterBody ?></pre>
+                </td>
+                <td>
+                  <form method="post" class="inline-form">
+                    <input type="hidden" name="action" value="admin_template_restore" />
+                    <input type="hidden" name="template_key" value="<?!= log.templateKey ?>" />
+                    <input type="hidden" name="subject" value="<?!= log.beforeSubject ?>" />
+                    <input type="hidden" name="body" value="<?!= log.beforeBody ?>" />
+                    <button type="submit">この内容に戻す</button>
+                  </form>
+                </td>
+              </tr>
+            <? }); ?>
+          <? } ?>
+        </tbody>
+      </table>
+
+      <div class="pager">
+        <? if (page > 1) { ?>
+          <a href="?action=admin_template_log&q=<?!= encodeURIComponent(query) ?>&page_size=<?!= pageSize ?>&page=<?!= page - 1 ?>">前へ</a>
+        <? } ?>
+        <? if (page * pageSize < total) { ?>
+          <a href="?action=admin_template_log&q=<?!= encodeURIComponent(query) ?>&page_size=<?!= pageSize ?>&page=<?!= page + 1 ?>">次へ</a>
+        <? } ?>
+      </div>
+    </div>
+  </body>
+</html>
