@@ -1,0 +1,232 @@
+<style>
+  body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    background: #f6f7fb;
+    margin: 0;
+    padding: 24px;
+    color: #333;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  h1 {
+    margin-top: 0;
+  }
+
+  .muted {
+    margin-top: 4px;
+    color: #666;
+    font-size: 14px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  input,
+  textarea {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  button {
+    background: #2f6fed;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .toolbar input,
+  .toolbar select {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .hint {
+    margin: 8px 0 16px;
+    color: #666;
+    font-size: 13px;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .table th,
+  .table td {
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+    text-align: left;
+  }
+
+  .divider {
+    margin: 24px 0;
+    border-top: 1px solid #eee;
+  }
+
+  .mail-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .inline-form {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .inline-form select {
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+
+  .inline-form button {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .pager {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .pager a {
+    color: #2f6fed;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .detail {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .detail div {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px;
+  }
+
+  .detail dt {
+    color: #666;
+  }
+
+  .detail dd {
+    margin: 0;
+  }
+
+  .button-link {
+    display: inline-block;
+    margin-top: 16px;
+    background: #2f6fed;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .link {
+    color: #2f6fed;
+    text-decoration: none;
+  }
+
+  .preview {
+    background: #f6f7fb;
+    border: 1px solid #e2e4ea;
+    padding: 12px;
+    border-radius: 6px;
+    white-space: pre-wrap;
+  }
+
+  .template-vars {
+    padding-left: 20px;
+    margin-top: 8px;
+    color: #444;
+  }
+
+  .date-filter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #555;
+  }
+
+  .date-filter input[type="date"] {
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+
+  .admin-nav {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 12px 0 16px;
+    font-size: 14px;
+  }
+
+  .template-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .template-card {
+    border: 1px solid #e2e4ea;
+    border-radius: 8px;
+    padding: 16px;
+    background: #fff;
+  }
+
+  .dashboard-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .card {
+    border: 1px solid #e2e4ea;
+    border-radius: 8px;
+    padding: 16px;
+    background: #fff;
+  }
+
+  .stats {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+    display: grid;
+    gap: 6px;
+  }
+</style>
