@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('styles'); ?>
+  </head>
+  <body>
+    <div class="container">
+      <h1>会員情報変更</h1>
+      <? if (organizationName) { ?>
+        <p class="muted"><?!= organizationName ?></p>
+      <? } ?>
+      <? if (!updateEnabled) { ?>
+        <p>現在、会員情報の変更受付は停止しています。</p>
+      <? } else { ?>
+        <form method="post">
+          <input type="hidden" name="action" value="update_request" />
+          <label class="field">
+            <span class="label">現在のメールアドレス</span>
+            <input type="email" name="current_email" required />
+          </label>
+          <? fields.forEach(function(field) { ?>
+            <label class="field">
+              <span class="label"><?!= field.label ?></span>
+              <? if (field.type === 'textarea') { ?>
+                <textarea name="<?!= field.key ?>" <?!= field.required ? 'required' : '' ?>></textarea>
+              <? } else { ?>
+                <input type="<?!= field.type ?>" name="<?!= field.key ?>" <?!= field.required ? 'required' : '' ?> />
+              <? } ?>
+            </label>
+          <? }); ?>
+          <button type="submit">確認メールを送る</button>
+        </form>
+      <? } ?>
+    </div>
+  </body>
+</html>
