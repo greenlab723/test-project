@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('styles'); ?>
+  </head>
+  <body>
+    <div class="container">
+      <h1>テンプレート管理</h1>
+      <? if (organizationName) { ?>
+        <p class="muted"><?!= organizationName ?></p>
+      <? } ?>
+
+      <nav class="admin-nav">
+        <a class="link" href="?action=admin_dashboard">ダッシュボード</a>
+        <a class="link" href="?action=admin">会員一覧</a>
+        <a class="link" href="?action=admin_mail_log">メール履歴</a>
+        <a class="link" href="?action=admin_action_log">操作ログ</a>
+        <a class="link" href="?action=admin_change_log">変更履歴</a>
+        <a class="link" href="?action=admin_error_log">エラーログ</a>
+        <a class="link" href="?action=admin_mail_retry">再送キュー</a>
+        <a class="link" href="?action=admin_templates">テンプレート</a>
+        <a class="link" href="?action=admin_template_log">テンプレ履歴</a>
+      </nav>
+
+      <p class="hint">テンプレートキーは MailTemplates シートの template_key と一致させます。</p>
+
+      <div class="template-grid">
+        <? templates.forEach(function(item) { ?>
+          <form method="post" class="template-card">
+            <input type="hidden" name="action" value="admin_template_save" />
+            <label class="field">
+              <span class="label">テンプレートキー</span>
+              <input type="text" name="template_key" value="<?!= item.key ?>" />
+            </label>
+            <label class="field">
+              <span class="label">件名</span>
+              <input type="text" name="subject" value="<?!= item.subject ?>" />
+            </label>
+            <label class="field">
+              <span class="label">本文</span>
+              <textarea name="body" rows="6"><?!= item.body ?></textarea>
+            </label>
+            <button type="submit">保存する</button>
+          </form>
+        <? }); ?>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2>新規テンプレート</h2>
+      <form method="post" class="template-card">
+        <input type="hidden" name="action" value="admin_template_save" />
+        <label class="field">
+          <span class="label">テンプレートキー</span>
+          <input type="text" name="template_key" />
+        </label>
+        <label class="field">
+          <span class="label">件名</span>
+          <input type="text" name="subject" />
+        </label>
+        <label class="field"> 
+          <span class="label">本文</span>
+          <textarea name="body" rows="6"></textarea>
+        </label>
+        <button type="submit">保存する</button>
+      </form>
+    </div>
+  </body>
+</html>
