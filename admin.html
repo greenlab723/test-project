@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('styles'); ?>
+  </head>
+  <body>
+    <div class="container">
+      <h1>管理画面</h1>
+      <? if (organizationName) { ?>
+        <p class="muted"><?!= organizationName ?></p>
+      <? } ?>
+
+      <nav class="admin-nav">
+        <a class="link" href="?action=admin_dashboard">ダッシュボード</a>
+        <a class="link" href="?action=admin">会員一覧</a>
+        <a class="link" href="?action=admin_mail_log">メール履歴</a>
+        <a class="link" href="?action=admin_action_log">操作ログ</a>
+        <a class="link" href="?action=admin_change_log">変更履歴</a>
+        <a class="link" href="?action=admin_error_log">エラーログ</a>
+        <a class="link" href="?action=admin_mail_retry">再送キュー</a>
+        <a class="link" href="?action=admin_templates">テンプレート</a>
+        <a class="link" href="?action=admin_template_log">テンプレ履歴</a>
+      </nav>
+
+      <form method="get" class="toolbar">
+        <input type="hidden" name="action" value="admin" />
+        <input type="text" name="q" value="<?!= query ?>" placeholder="名前・メールで検索" />
+        <select name="status">
+          <option value="" <?!= status === '' ? 'selected' : '' ?>>すべて</option>
+          <option value="active" <?!= status === 'active' ? 'selected' : '' ?>>有効</option>
+          <option value="inactive" <?!= status === 'inactive' ? 'selected' : '' ?>>無効</option>
+          <option value="pending" <?!= status === 'pending' ? 'selected' : '' ?>>仮登録</option>
+        </select>
+        <label class="date-filter">
+          <span>登録日</span>
+          <input type="date" name="created_from" value="<?!= createdFrom ?>" />
+          <span>〜</span>
+          <input type="date" name="created_to" value="<?!= createdTo ?>" />
+        </label>
+        <label class="date-filter">
+          <span>更新日</span>
+          <input type="date" name="updated_from" value="<?!= updatedFrom ?>" />
+          <span>〜</span>
+          <input type="date" name="updated_to" value="<?!= updatedTo ?>" />
+        </label>
+        <select name="page_size">
+          <option value="25" <?!= pageSize === 25 ? 'selected' : '' ?>>25件</option>
+          <option value="50" <?!= pageSize === 50 ? 'selected' : '' ?>>50件</option>
+          <option value="100" <?!= pageSize === 100 ? 'selected' : '' ?>>100件</option>
+        </select>
+        <button type="submit">検索</button>
+        <a class="button-link" href="?action=admin_members_csv&q=<?!= encodeURIComponent(query) ?>&status=<?!= status ?>&created_from=<?!= createdFrom ?>&created_to=<?!= createdTo ?>&updated_from=<?!= updatedFrom ?>&updated_to=<?!= updatedTo ?>">CSV出力</a>
+      </form>
+
+      <p class="hint">表示件数: <?!= pageSize ?>件 / 全<?!= total ?>件</p>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>会員ID</th>
+            <th>氏名</th>
+            <th>メール</th>
+            <th>状態</th>
+          </tr>
+        </thead>
+        <tbody>
+          <? if (members.length === 0) { ?>
+            <tr>
+              <td colspan="4">該当する会員が見つかりませんでした。</td>
+            </tr>
+          <? } else { ?>
+            <? members.forEach(function(member) { ?>
+              <tr>
+                <td><?!= member.memberId ?></td>
+                <td>
+                  <a class="link" href="?action=admin_member&member_id=<?!= member.memberId ?>"><?!= member.name ?></a>
+                </td>
+                <td><?!= member.email ?></td>
+                <td>
+                  <form method="post" class="inline-form">
+                    <input type="hidden" name="action" value="admin_status" />
+                    <input type="hidden" name="member_id" value="<?!= member.memberId ?>" />
+                    <select name="status">
+                      <option value="active" <?!= member.status === 'active' ? 'selected' : '' ?>>有効</option>
+                      <option value="inactive" <?!= member.status === 'inactive' ? 'selected' : '' ?>>無効</option>
+                      <option value="pending" <?!= member.status === 'pending' ? 'selected' : '' ?>>仮登録</option>
+                    </select>
+                    <button type="submit">更新</button>
+                  </form>
+                </td>
+              </tr>
+            <? }); ?>
+          <? } ?>
+        </tbody>
+      </table>
+
+      <div class="pager">
+        <? if (page > 1) { ?>
+          <a href="?action=admin&q=<?!= encodeURIComponent(query) ?>&status=<?!= status ?>&created_from=<?!= createdFrom ?>&created_to=<?!= createdTo ?>&updated_from=<?!= updatedFrom ?>&updated_to=<?!= updatedTo ?>&page_size=<?!= pageSize ?>&page=<?!= page - 1 ?>">前へ</a>
+        <? } ?>
+        <? if (page * pageSize < total) { ?>
+          <a href="?action=admin&q=<?!= encodeURIComponent(query) ?>&status=<?!= status ?>&created_from=<?!= createdFrom ?>&created_to=<?!= createdTo ?>&updated_from=<?!= updatedFrom ?>&updated_to=<?!= updatedTo ?>&page_size=<?!= pageSize ?>&page=<?!= page + 1 ?>">次へ</a>
+        <? } ?>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2>メール送信</h2>
+      <form method="post" class="mail-form">
+        <input type="hidden" name="action" value="admin_send" />
+        <p class="hint">テンプレートは設定シートの「ADMIN_MAIL_TEMPLATE_KEY」で初期選択されます。</p>
+        <label class="field">
+          <span class="label">送信モード</span>
+          <select name="mode">
+            <option value="bulk">一斉送信</option>
+            <option value="individual">個別送信</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="label">テンプレート</span>
+          <select name="template_key">
+            <option value="">選択なし</option>
+            <? mailTemplates.forEach(function(template) { ?>
+              <option value="<?!= template.key ?>" <?!= template.key === selectedTemplateKey ? 'selected' : '' ?>><?!= template.key ?></option>
+            <? }); ?>
+          </select>
+        </label>
+        <label class="field">
+          <span class="label">送信先メール（個別送信時のみ）</span>
+          <input type="email" name="target_email" placeholder="example@example.com" />
+        </label>
+        <label class="field">
+          <span class="label">件名</span>
+          <input type="text" name="subject" value="<?!= selectedTemplate ? selectedTemplate.subject : '' ?>" />
+        </label>
+        <label class="field">
+          <span class="label">本文</span>
+          <textarea name="body" rows="6"><?!= selectedTemplate ? selectedTemplate.body : '' ?></textarea>
+        </label>
+        <button type="submit">送信する</button>
+      </form>
+
+      <div class="divider"></div>
+
+      <h2>テンプレートプレビュー</h2>
+      <? if (!selectedTemplate) { ?>
+        <p>テンプレートを選択するとプレビューが表示されます。</p>
+      <? } else { ?>
+        <p class="hint">件名</p>
+        <pre class="preview"><?!= selectedTemplate.subject ?></pre>
+        <p class="hint">本文</p>
+        <pre class="preview"><?!= selectedTemplate.body ?></pre>
+      <? } ?>
+
+      <h3>使用できる変数</h3>
+      <ul class="template-vars">
+        <? templateVariables.forEach(function(item) { ?>
+          <li><code>{{<?!= item.key ?>}}</code> - <?!= item.description ?></li>
+        <? }); ?>
+      </ul>
+    </div>
+  </body>
+</html>

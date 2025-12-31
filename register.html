@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('styles'); ?>
+  </head>
+  <body>
+    <div class="container">
+      <h1>会員登録</h1>
+      <? if (organizationName) { ?>
+        <p class="muted"><?!= organizationName ?></p>
+      <? } ?>
+      <? if (!registrationEnabled) { ?>
+        <p>現在、登録受付は停止しています。</p>
+      <? } else { ?>
+        <form method="post">
+          <? fields.forEach(function(field) { ?>
+            <label class="field">
+              <span class="label"><?!= field.label ?></span>
+              <? if (field.type === 'textarea') { ?>
+                <textarea name="<?!= field.key ?>" <?!= field.required ? 'required' : '' ?>></textarea>
+              <? } else { ?>
+                <input type="<?!= field.type ?>" name="<?!= field.key ?>" <?!= field.required ? 'required' : '' ?> />
+              <? } ?>
+            </label>
+          <? }); ?>
+          <button type="submit">送信する</button>
+        </form>
+      <? } ?>
+    </div>
+  </body>
+</html>
