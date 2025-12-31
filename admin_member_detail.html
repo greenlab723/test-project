@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('styles'); ?>
+  </head>
+  <body>
+    <div class="container">
+      <h1>会員詳細</h1>
+      <? if (organizationName) { ?>
+        <p class="muted"><?!= organizationName ?></p>
+      <? } ?>
+
+      <nav class="admin-nav">
+        <a class="link" href="?action=admin_dashboard">ダッシュボード</a>
+        <a class="link" href="?action=admin">会員一覧</a>
+        <a class="link" href="?action=admin_mail_log">メール履歴</a>
+        <a class="link" href="?action=admin_action_log">操作ログ</a>
+        <a class="link" href="?action=admin_change_log">変更履歴</a>
+        <a class="link" href="?action=admin_error_log">エラーログ</a>
+        <a class="link" href="?action=admin_mail_retry">再送キュー</a>
+        <a class="link" href="?action=admin_templates">テンプレート</a>
+        <a class="link" href="?action=admin_template_log">テンプレ履歴</a>
+      </nav>
+
+      <dl class="detail">
+        <div>
+          <dt>会員ID</dt>
+          <dd><?!= member.memberId ?></dd>
+        </div>
+        <div>
+          <dt>氏名</dt>
+          <dd><?!= member.name ?></dd>
+        </div>
+        <div>
+          <dt>メール</dt>
+          <dd><?!= member.email ?></dd>
+        </div>
+        <div>
+          <dt>状態</dt>
+          <dd><?!= member.status ?></dd>
+        </div>
+        <div>
+          <dt>登録日</dt>
+          <dd><?!= member.createdAt ?></dd>
+        </div>
+        <div>
+          <dt>更新日</dt>
+          <dd><?!= member.updatedAt ?></dd>
+        </div>
+      </dl>
+
+      <h2>登録情報</h2>
+      <? if (!member.formData) { ?>
+        <p>登録情報がありません。</p>
+      <? } else { ?>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>項目</th>
+              <th>内容</th>
+            </tr>
+          </thead>
+          <tbody>
+            <? Object.keys(member.formData).forEach(function(key) { ?>
+              <tr>
+                <td><?!= key ?></td>
+                <td><?!= member.formData[key] ?></td>
+              </tr>
+            <? }); ?>
+          </tbody>
+        </table>
+      <? } ?>
+
+      <a class="button-link" href="?action=admin">管理画面へ戻る</a>
+      <a class="button-link" href="?action=admin_change_log&member_id=<?!= member.memberId ?>">変更履歴を見る</a>
+    </div>
+  </body>
+</html>
