@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('styles'); ?>
+  </head>
+  <body>
+    <div class="container">
+      <h1>ダッシュボード</h1>
+      <? if (organizationName) { ?>
+        <p class="muted"><?!= organizationName ?></p>
+      <? } ?>
+
+      <nav class="admin-nav">
+        <a class="link" href="?action=admin_dashboard">ダッシュボード</a>
+        <a class="link" href="?action=admin">会員一覧</a>
+        <a class="link" href="?action=admin_mail_log">メール履歴</a>
+        <a class="link" href="?action=admin_action_log">操作ログ</a>
+        <a class="link" href="?action=admin_change_log">変更履歴</a>
+        <a class="link" href="?action=admin_error_log">エラーログ</a>
+        <a class="link" href="?action=admin_mail_retry">再送キュー</a>
+        <a class="link" href="?action=admin_templates">テンプレート</a>
+        <a class="link" href="?action=admin_template_log">テンプレ履歴</a>
+      </nav>
+
+      <div class="dashboard-grid">
+        <section class="card">
+          <h2>会員ステータス</h2>
+          <ul class="stats">
+            <li>合計: <?!= stats.members.total ?></li>
+            <li>有効: <?!= stats.members.active ?></li>
+            <li>無効: <?!= stats.members.inactive ?></li>
+            <li>仮登録: <?!= stats.members.pending ?></li>
+          </ul>
+        </section>
+        <section class="card">
+          <h2>直近7日メール送信数</h2>
+          <ul class="stats">
+            <li>合計: <?!= stats.mail.total ?></li>
+            <li>登録認証: <?!= stats.mail.register_verify ?></li>
+            <li>変更認証: <?!= stats.mail.update_verify ?></li>
+            <li>一斉送信: <?!= stats.mail.admin_bulk ?></li>
+            <li>個別送信: <?!= stats.mail.admin_individual ?></li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>
